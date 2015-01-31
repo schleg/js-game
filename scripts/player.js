@@ -1,21 +1,25 @@
-define(['keyboard'], function (keyboard) {
+define(['keyboard'], function (control) {
   var size = {
-    x: 10,
-    y: 10
+    x: 30,
+    y: 30
   };
   var center = null;
   return {
     update: function (bounds) {
       if (!center) {
         center = {
-          x: bounds.x / 2,
-          y: bounds.y - size.y / 2
+          x: (bounds.x / 2) - size.x / 2,
+          y: (bounds.y / 2) - size.y / 2
         }
       }
-      if (keyboard.active(keyboard.DIRECTION.LEFT)) {
+      if (control.active(control.DIRECTION.LEFT)) {
         center.x -= 1;
-      } else if (keyboard.active(keyboard.DIRECTION.RIGHT)) {
+      } else if (control.active(control.DIRECTION.UP)) {
+        center.y -= 1;
+      } else if (control.active(control.DIRECTION.RIGHT)) {
         center.x += 1;
+      } else if (control.active(control.DIRECTION.DOWN)) {
+        center.y += 1;
       }
     },
     draw: function (screen) {
