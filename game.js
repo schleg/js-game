@@ -34,7 +34,7 @@
     this.size = { x: 10, y: 10 };
     var center = { x: 0, y: 0 };
     this.update = function (bounds) {
-      center = { x: bounds.x / 2, y: bounds.y - this.size.y * 2 }
+      center = { x: bounds.x / 2, y: bounds.y - this.size.y / 2 }
     };
     this.draw = function (screen) {
       screen.fillRect(
