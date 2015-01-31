@@ -25,16 +25,29 @@
       requestAnimationFrame(tick);
     };
     tick();
-    this.createEntity = function (type) {
-      entities.push(new type(self));
+    this.createEntity = function (type, control) {
+      entities.push(new type(self, new control()));
     };
   };
-  var Player = function (game) {
-    this.game = game;
-    this.size = { x: 10, y: 10 };
-    var center = { x: 0, y: 0 };
+  var Player = function (game, control) {
+    var control = control;
+    this.size = {
+      x: 10,
+      y: 10
+    };
+    var center = null;
     this.update = function (bounds) {
-      center = { x: bounds.x / 2, y: bounds.y - this.size.y / 2 }
+      if (!center) {
+        center = {
+          x: bounds.x / 2,
+          y: bounds.y - this.size.y / 2
+        }
+      }
+      if (control.active(control.DIRECTION.LEFT)) {
+        center.x -= 1;
+      } else if (control.active(control.DIRECTION.RIGHT)) {
+        center.x += 1;
+      }
     };
     this.draw = function (screen) {
       screen.fillRect(
@@ -43,8 +56,24 @@
         this.size.x, this.size.y);
     };
   };
+  var Keyboard = function () {
+    var keyState = {};
+    window.addEventListener('keydown', function (e) {
+      keyState[e.keyCode] = true;
+    });
+    window.addEventListener('keyup', function (e) {
+      keyState[e.keyCode] = false;
+    });
+    this.active = function (keyCode) {
+      return keyState[keyCode] === true;
+    };
+    this.DIRECTION = {
+      LEFT: 37,
+      RIGHT: 39
+    };
+  };
   window.addEventListener('load', function () {
     var game = new Game();
-    game.createEntity(Player);
+    game.createEntity(Player, Keyboard);
   });
 })();
